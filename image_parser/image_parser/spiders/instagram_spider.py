@@ -18,7 +18,7 @@ class InstagramSpider(scrapy.Spider):
         self.images_quantity = int(images_quantity)
 
     def parse(self, response):
-        inspect_response(response, self)
+        # inspect_response(response, self)
         scripts = response.xpath(
             '//script[contains(text(), "sharedData")]/text()').re_first(
             r'window._sharedData = (.*);')
