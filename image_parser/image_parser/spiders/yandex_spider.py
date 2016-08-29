@@ -7,10 +7,10 @@ class YandexSpider(scrapy.Spider):
     name = 'yandex_spider'
     allowed_domains = ['yandex.ua']
     tag = None
-    images_quantity = 10
+    images_quantity = 5
     number = 1
 
-    def __init__(self, tag=None, images_quantity=None, *args, **kwargs):
+    def __init__(self, tag=None, images_quantity=5, *args, **kwargs):
         super(YandexSpider, self).__init__(*args, **kwargs)
         self.start_urls = ['https://yandex.ua/images/search?text=%s' % tag]
         self.tag = tag
@@ -29,4 +29,10 @@ class YandexSpider(scrapy.Spider):
                 self.number += 1
                 yield item
             else:
-                break
+                return False
+
+        next_page = response.xpath(
+            '//div[contains(@class, "more_direction_next")]/a/@href').extract()
+        if next_page:
+            url = response.urljoin(next_page[0])
+            yield scrapy.Request(url, self.parse)

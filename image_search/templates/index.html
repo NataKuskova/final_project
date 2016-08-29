@@ -6,23 +6,18 @@
     <div class="form">
         <form action="{% url 'index' %}" method="post">{% csrf_token %}
             <label for="tag">Enter a tag: </label>
-            <input type="text" name="tag" id="tag" value="{{tag}}" required>
-            <input type="submit" value='Search' name="search" />
+            <input type="text" name="tag" id="tag" value="{%if current_tag %}{{current_tag}}{% endif %}" required>
+            <input type="submit" value='Search' name="search" class="button"/>
         </form>
     </div>
 
-    <div class="content">
-        {% if error %}
-            <h3>{{error}}</h3>
-        {% else %}
-            {% for image in images %}
-                <div class="image">
-                    <a href="{{image.image_url}}"><img src="{{image.image_url}}"></a>
-                    <p>Found in: <a href="{{image.site}}">{{image.site}}</a></p>
-                    <!--<a href="{{image.image_url}}" id="link">{{image.image_url}}</a>-->
-                </div>
-            {% empty %}
+    {% if error %}
+        <h3>{{ error }}</h3>
+    {% else %}
+        {% if tag_history %}
+            {% for tag in tag_history %}
+                <p class="result_url">Results for tag "{{tag}}": <a href="{% url 'result' %}?tag={{tag}}">{% url 'result'%}?tag={{tag}}</a></p>
             {% endfor %}
         {% endif %}
-    </div>
+    {% endif %}
 {% endblock %}

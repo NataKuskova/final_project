@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Search results for tag "{{images.0.tag}}"{% endblock %}
+
+{% block content %}
+
+    <div class="content">
+        {# if error #}
+            <h3>{# error #}</h3>
+        {# else #}
+            <h1>{{images.0.tag}}</h1>
+            {% for image in images %}
+                <div class="image">
+                    <a href="{{image.image_url}}"><img src="{{image.image_url}}"></a>
+                    <p>Found in: <a href="{{image.site}}">{{image.site}}</a></p>
+                    <!--<a href="{{image.image_url}}" id="link">{{image.image_url}}</a>-->
+                </div>
+            {% empty %}
+            {% endfor %}
+
+            {% if is_paginated %}
+                <div class="pagination">
+                    <ul>
+                        {% if page_obj.has_previous %}
+                            <li>
+                                <a href="{% url 'result' page=page_obj.previous_page_number %}{% if request.GET.urlencode %}?{{request.GET.urlencode }}{% endif %}">
+                                    <<
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page in page_obj.paginator.page_range %}
+                            {% if page_obj.number == page %}
+                                <li class="active">
+                                    <a href="{% url 'result' page=page %}{% if request.GET.urlencode %}?{{request.GET.urlencode }}{% endif %}">
+                                        {{page}}
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{% url 'result' page=page %}{% if request.GET.urlencode %}?{{request.GET.urlencode }}{% endif %}">
+                                        {{page}}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li>
+                                <a href="{% url 'result' page=page_obj.next_page_number %}{% if request.GET.urlencode %}?{{request.GET.urlencode }}{% endif %}">
+                                    >>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+
+        {# endif #}
+    </div>
+
+{% endblock %}

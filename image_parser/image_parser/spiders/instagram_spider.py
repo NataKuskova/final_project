@@ -8,17 +8,17 @@ class InstagramSpider(scrapy.Spider):
     name = 'instagram_spider'
     allowed_domains = ['instagram.com']
     tag = None
-    images_quantity = 10
+    images_quantity = 5
     number = 1
 
-    def __init__(self, tag=None, images_quantity=None, *args, **kwargs):
+    def __init__(self, tag=None, images_quantity=5, *args, **kwargs):
         super(InstagramSpider, self).__init__(*args, **kwargs)
         self.start_urls = ['https://www.instagram.com/explore/tags/%s/' % tag]
         self.tag = tag
         self.images_quantity = int(images_quantity)
 
     def parse(self, response):
-        # inspect_response(response, self)
+        inspect_response(response, self)
         scripts = response.xpath(
             '//script[contains(text(), "sharedData")]/text()').re_first(
             r'window._sharedData = (.*);')
@@ -34,4 +34,4 @@ class InstagramSpider(scrapy.Spider):
                 self.number += 1
                 yield item
             else:
-                break
+                return False
