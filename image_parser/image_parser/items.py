@@ -13,3 +13,4 @@ class ImageParserItem(Item):
     image_url = Field()
     site = Field()
     tag = Field()
+    date = Field()

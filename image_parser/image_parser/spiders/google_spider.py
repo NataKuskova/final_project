@@ -1,9 +1,10 @@
 import scrapy
 from image_parser.items import ImageParserItem
+from scrapy_redis.spiders import RedisSpider
 from scrapy.shell import inspect_response
 
 
-class GoogleSpider(scrapy.Spider):
+class GoogleSpider(RedisSpider):
     name = 'google_spider'
     allowed_domains = ['google.com.ua']
     tag = None

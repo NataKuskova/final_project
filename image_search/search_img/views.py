@@ -31,7 +31,7 @@ class SearchView(TemplateView):
                     process = subprocess.Popen(
                         'scrapy crawl ' + spider + ' -a tag=' + input_tag +
                         ' -a images_quantity=5',
-                        cwd=r'/home/natali/PycharmProjects/final_project/image_parser/image_parser',
+                        cwd=r'/home/user/Nata/PycharmProjects/final_project/image_parser/image_parser',
                         shell=True,
                         stdout=subprocess.PIPE
                     )

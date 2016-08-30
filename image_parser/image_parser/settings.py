@@ -19,6 +19,9 @@ BOT_NAME = 'image_parser'
 SPIDER_MODULES = ['image_parser.spiders']
 NEWSPIDER_MODULE = 'image_parser.spiders'
 
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# SCHEDULER_PERSIST = True
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'image_parser (+http://www.yourdomain.com)'
@@ -70,7 +73,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'image_parser.pipelines.ImageParserPipeline': 300,
+   'scrapy_redis.pipelines.RedisPipeline': 300,
+   'image_parser.pipelines.ImageParserPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -103,3 +107,5 @@ django.setup()
 
 
 # IMAGES_QUANTITY = settings.IMAGES_QUANTITY
+
+
