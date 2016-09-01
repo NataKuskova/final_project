@@ -2,9 +2,7 @@ from django.shortcuts import render, get_list_or_404
 from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 from django.views.generic import View, ListView, TemplateView
-from django.db.models import Min, Count
-import subprocess
-from search_img.forms import *
+import redis
 from search_img.models import *
 
 
@@ -21,32 +19,35 @@ class SearchView(TemplateView):
         input_tag = request.POST.get('tag', None)
         if input_tag is not None:
             try:
-                tag = Tag.objects.get(name=input_tag)
-                images = get_list_or_404(SearchResult, tag__name=input_tag)
+                tag = Tag.objects.get_tag(input_tag)
+                images = SearchResult.objects.get_list(input_tag)
             except:
-                tag = Tag.objects.get_or_create(name=input_tag)
-                spiders = ['google_spider', 'yandex_spider',
-                           'instagram_spider']
-                for spider in spiders:
-                    process = subprocess.Popen(
-                        'scrapy crawl ' + spider + ' -a tag=' + input_tag +
-                        ' -a images_quantity=5',
-                        cwd=r'/home/user/Nata/PycharmProjects/final_project/image_parser/image_parser',
-                        shell=True,
-                        stdout=subprocess.PIPE
-                    )
-                    out = process.communicate()
-                    print(out)
+                tag = Tag.objects.get_or_create_tag(input_tag)
+
+                r = redis.StrictRedis(host='localhost', port=6379, db=0)
+                r.lpush('google_spider:start_urls',
+                        '{"tag": "' + input_tag + '", "images_quantity": 5}')
+                r.lpush('yandex_spider:start_urls',
+                        '{"tag": "' + input_tag + '", "images_quantity": 5}')
+                r.lpush('instagram_spider:start_urls',
+                        '{"tag": "' + input_tag + '", "images_quantity": 5}')
+                # пока не знаю где это проверять
+                if not r.llen('google_spider:start_urls') and not r.llen(
+                        'yandex_spider:start_urls') and not r.llen(
+                        'instagram_spider:start_urls'):
+                    Tag.objects.update_tag(input_tag)
 
             if 'tags' in request.session:
                 session = request.session['tags']
                 if input_tag not in session:
                     request.session['tags'] = []
                     request.session['tags'] = session
-                    request.session['tags'].append(input_tag)
+                    request.session['tags'].append({'name': input_tag,
+                                                    'status': tag.status})
             else:
                 request.session['tags'] = []
-                request.session['tags'].append(input_tag)
+                request.session['tags'].append({'name': input_tag,
+                                                'status': tag.status})
             return render(request, 'index.html',
                           {'current_tag': input_tag,
                            'tag_history': request.session['tags']}
@@ -65,6 +66,5 @@ class ResultView(ListView):
         queryset = super(ResultView, self).get_queryset()
         input_tag = self.request.GET.get('tag', None)
         if input_tag is not None:
-            # images = SearchResult.objects.all().values('site').filter(tag__name=tag).annotate(pk=Min('id'))
-            return queryset.filter(tag__name=input_tag).all()
+            return SearchResult.objects.get_results(input_tag)
         return queryset

@@ -3,8 +3,12 @@ from search_img.models import *
 
 
 class SearchResultAdmin(admin.ModelAdmin):
-    list_display = ['id', 'tag', 'image_url', 'site']
+    list_display = ['id', 'rank', 'tag', 'image_url', 'site', 'date']
 
 
-admin.site.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'status']
+
+
+admin.site.register(Tag, TagAdmin)
 admin.site.register(SearchResult, SearchResultAdmin)

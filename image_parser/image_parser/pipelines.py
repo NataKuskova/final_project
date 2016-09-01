@@ -14,5 +14,6 @@ class ImageParserPipeline(object):
         tag = Tag.objects.get(name=item['tag'])
         SearchResult.objects.create(tag=tag,
                                     image_url=item['image_url'],
-                                    site=item['site'])
+                                    site=item['site'],
+                                    rank=item['rank'])
         return item

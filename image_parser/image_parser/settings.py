@@ -73,8 +73,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapy_redis.pipelines.RedisPipeline': 300,
-   'image_parser.pipelines.ImageParserPipeline': 400,
+   'image_parser.pipelines.ImageParserPipeline': 300,
+   'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

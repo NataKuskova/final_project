@@ -1,7 +1,7 @@
 from fake_useragent import UserAgent
 
 
-class RandomUserAgentMiddleware:
+class RandomUserAgentMiddleware(object):
     def __init__(self):
         super(RandomUserAgentMiddleware, self).__init__()
 

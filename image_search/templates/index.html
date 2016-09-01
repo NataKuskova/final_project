@@ -16,7 +16,7 @@
     {% else %}
         {% if tag_history %}
             {% for tag in tag_history %}
-                <p class="result_url">Results for tag "{{tag}}": <a href="{% url 'result' %}?tag={{tag}}">{% url 'result'%}?tag={{tag}}</a></p>
+                <p class="result_url">Results for tag "{{tag.name}}": <a href="{% url 'result' %}?tag={{tag.name}}">{% url 'result'%}?tag={{tag.name}}</a> Current status: {{tag.status}}.</p>
             {% endfor %}
         {% endif %}
     {% endif %}
