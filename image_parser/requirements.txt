@@ -11,6 +11,7 @@ Django==1.10
 docutils==0.12
 enum34==1.1.6
 fake-useragent==0.1.2
+honcho==0.7.1
 idna==2.1
 imagesize==0.7.1
 ipaddress==1.0.16

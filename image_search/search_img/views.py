@@ -3,7 +3,13 @@ from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 from django.views.generic import View, ListView, TemplateView
 import redis
+import logging
 from search_img.models import *
+
+
+FORMAT = u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s ' \
+         u'[%(asctime)s]  %(message)s'
+logging.basicConfig(format=FORMAT, level=logging.DEBUG, filename=u'logs.log')
 
 
 class SearchView(TemplateView):
@@ -34,7 +40,12 @@ class SearchView(TemplateView):
                     if request.session['current_tag'] in item['name'] \
                             and item['status'] == 'scheduled':
                         item['status'] = 'ready'
+                        logging.debug('Set the status "' + item['status'] +
+                                      '" for the tag "' +
+                                      request.session['current_tag'] + '".')
 
+            logging.info('Successful displaying the field for searching '
+                         'images and users search history.')
             return render(request, 'index.html',
                           {'tag_history': request.session['tags']})
         return render(request, 'index.html')
@@ -52,27 +63,37 @@ class SearchView(TemplateView):
             Template with users' search history.
             If the tag is empty, returns an error message.
         """
+        status = 'scheduled'
         input_tag = request.POST.get('tag', None)
         if input_tag is not None:
             try:
                 tag = Tag.objects.get_tag(input_tag)
                 images = SearchResult.objects.get_list(input_tag)
                 status = 'ready'
+                logging.info('The tag and the search results for the tag '
+                             'present in the database.')
+                logging.debug('Set the status "' + status +
+                              '" for the tag "' + tag.name + '".')
             except:
                 tag = Tag.objects.get_or_create_tag(input_tag)
 
                 spider_list = ['google_spider',
                                'yandex_spider',
                                'instagram_spider']
+                try:
+                    r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
 
-                r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+                    for spider in spider_list:
+                        r.lpush(spider + ':start_urls',
+                                '{"tag": "' + input_tag + '", '
+                                '"images_quantity": 5}')
+                    logging.info('Tag "' + tag.name + '" is successfully transmitted to spiders.')
 
-                for spider in spider_list:
-                    r.lpush(spider + ':start_urls',
-                            '{"tag": "' + input_tag + '", '
-                            '"images_quantity": 5}')
-
-                status = 'scheduled'
+                    status = 'scheduled'
+                    logging.debug('Set the status "' + status +
+                                  '" for the tag "' + tag.name + '".')
+                except:
+                    logging.error('Something went wrong.')
 
             if 'tags' in request.session:
                 session = request.session['tags']
@@ -91,11 +112,15 @@ class SearchView(TemplateView):
                                              'status': status}]
             request.session['current_tag'] = input_tag
 
+            logging.info('Tag "' + input_tag + '" is added to the session.')
+
+            logging.info('Successful displaying users search history.')
             return render(request, 'all.html',
                           {'current_tag': input_tag,
                            'tag_history': request.session['tags']}
                           )
         else:
+            logging.error('The tag is empty.')
             return render(request, 'all.html', {'error': 'Enter a tag!'})
 
 
@@ -122,8 +147,12 @@ class ResultView(ListView):
         Returns:
              A list of filtered images.
         """
+
         queryset = super(ResultView, self).get_queryset()
         input_tag = self.request.GET.get('tag', None)
         if input_tag is not None:
+            logging.info('Successful display of results.')
             return SearchResult.objects.get_results(input_tag)
+        else:
+            logging.error('Empty tag!')
         return queryset

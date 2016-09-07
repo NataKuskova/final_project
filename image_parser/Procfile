@@ -1,0 +1,3 @@
+google_spider: scrapy runspider image_parser/spiders/google_spider.py
+yandex_spider: scrapy runspider image_parser/spiders/yandex_spider.py
+instagram_spider: scrapy runspider image_parser/spiders/instagram_spider.py
