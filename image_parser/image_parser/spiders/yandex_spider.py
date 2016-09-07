@@ -1,11 +1,24 @@
 import scrapy
 from image_parser.items import ImageParserItem
 from scrapy_redis.spiders import RedisSpider
-from scrapy.shell import inspect_response
 import json
 
 
 class YandexSpider(RedisSpider):
+    """
+    Class to parse yandex.ua.
+
+    Attributes:
+        name: Spider name.
+        allowed_domains: List of strings containing domains that this spider
+        is allowed to crawl.
+        start_urls: A list of URLs where the spider will begin to crawl
+        from, when no particular URLs are specified.
+        tag: Tag name.
+        images_quantity: The number of images that need to parse.
+        number: Record number counter.
+    """
+
     name = 'yandex_spider'
     allowed_domains = ['yandex.ua']
     start_urls = ['https://yandex.ua/images/search?text=%s']
@@ -13,13 +26,16 @@ class YandexSpider(RedisSpider):
     images_quantity = 5
     number = 1
 
-    # def __init__(self, tag=None, images_quantity=5, *args, **kwargs):
-    #     super(YandexSpider, self).__init__(*args, **kwargs)
-    #     self.start_urls = ['https://yandex.ua/images/search?text=%s' % tag]
-    #     self.tag = tag
-    #     self.images_quantity = int(images_quantity)
-
     def make_request_from_data(self, data):
+        """
+        Make request from data.
+
+        Args:
+            data: Data.
+
+        Returns:
+            Transmits URL into the function make_requests_from_url.
+        """
         data = json.loads(data)
         if 'tag' in data and 'images_quantity' in data:
             url = self.start_urls[0] % data['tag']
@@ -31,7 +47,13 @@ class YandexSpider(RedisSpider):
                               data)
 
     def parse(self, response):
-        # inspect_response(response, self)
+        """
+        This method is in charge of processing the response and
+        returning scraped data and/or more URLs to follow.
+
+        Args:
+            response: The response to parse.
+        """
         images = response.xpath(
             '//div[contains(@class, "serp-item_type_search")]')
         for img in images:
@@ -41,6 +63,7 @@ class YandexSpider(RedisSpider):
                 item['site'] = 'https://' + self.allowed_domains[0]
                 item['tag'] = self.tag
                 item['rank'] = self.number
+                item['images_quantity'] = self.images_quantity
                 self.number += 1
                 yield item
             else:

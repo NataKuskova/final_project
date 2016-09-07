@@ -60,9 +60,9 @@ CONCURRENT_REQUESTS_PER_IP = 2
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'image_parser.middlewares.RandomUserAgentMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+   'image_parser.middlewares.RandomUserAgentMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -74,6 +74,7 @@ CONCURRENT_REQUESTS_PER_IP = 2
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'image_parser.pipelines.ImageParserPipeline': 300,
+   # 'image_parser.pipelines.ChangeStatusPipeline': 400,
    'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 

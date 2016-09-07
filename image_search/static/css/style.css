@@ -105,4 +105,7 @@ table{
 }
 .result_url a{
     color: #5d5b5b;
-}
+}/*
+.result_url.last{
+    visibility: hidden;
+}*/

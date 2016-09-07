@@ -7,17 +7,18 @@
         <form action="{% url 'index' %}" method="post">{% csrf_token %}
             <label for="tag">Enter a tag: </label>
             <input type="text" name="tag" id="tag" value="{%if current_tag %}{{current_tag}}{% endif %}" required>
-            <input type="submit" value='Search' name="search" class="button"/>
+            <input type="submit" value='Search' name="search" class="button" id="search"/>
         </form>
     </div>
 
     {% if error %}
         <h3>{{ error }}</h3>
     {% else %}
-        {% if tag_history %}
-            {% for tag in tag_history %}
-                <p class="result_url">Results for tag "{{tag.name}}": <a href="{% url 'result' %}?tag={{tag.name}}">{% url 'result'%}?tag={{tag.name}}</a> Current status: {{tag.status}}.</p>
-            {% endfor %}
-        {% endif %}
+        <div id="list_links">
+            {% include 'all.html' %}
+        </div>
+        <div id="ll"></div>
     {% endif %}
+
+<script type="text/javascript" src='{% static "js/client.js" %}'></script>
 {% endblock %}

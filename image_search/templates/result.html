@@ -16,6 +16,7 @@
                     <!--<a href="{{image.image_url}}" id="link">{{image.image_url}}</a>-->
                 </div>
             {% empty %}
+                <p>The request is processed...</p>
             {% endfor %}
 
             {% if is_paginated %}

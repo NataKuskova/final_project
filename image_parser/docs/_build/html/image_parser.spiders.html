@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>image_parser.spiders package &#8212; image_parser 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="image_parser 1.0 documentation" href="index.html" />
+    <link rel="up" title="image_parser package" href="image_parser.html" />
+    <link rel="prev" title="image_parser package" href="image_parser.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="image-parser-spiders-package">
+<h1>image_parser.spiders package<a class="headerlink" href="#image-parser-spiders-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-image_parser.spiders.google_spider">
+<span id="image-parser-spiders-google-spider-module"></span><h2>image_parser.spiders.google_spider module<a class="headerlink" href="#module-image_parser.spiders.google_spider" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="image_parser.spiders.google_spider.GoogleSpider">
+<em class="property">class </em><code class="descclassname">image_parser.spiders.google_spider.</code><code class="descname">GoogleSpider</code><span class="sig-paren">(</span><em>name=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/google_spider.html#GoogleSpider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">scrapy_redis.spiders.RedisSpider</span></code></p>
+<p>Class to parse google.com.ua.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>name: Spider name.
+allowed_domains: List of strings containing domains that this spider
+is allowed to crawl.
+start_urls: A list of URLs where the spider will begin to crawl
+from, when no particular URLs are specified.
+tag: Tag name.
+images_quantity: The number of images that need to parse.
+number: Record number counter.</dd>
+</dl>
+<dl class="attribute">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.allowed_domains">
+<code class="descname">allowed_domains</code><em class="property"> = ['google.com.ua']</em><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.allowed_domains" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.images_quantity">
+<code class="descname">images_quantity</code><em class="property"> = 5</em><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.images_quantity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.make_request_from_data">
+<code class="descname">make_request_from_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/google_spider.html#GoogleSpider.make_request_from_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.make_request_from_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make request from data.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>data: Data.</dd>
+<dt>Returns:</dt>
+<dd>Transmits URL into the function make_requests_from_url.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.name">
+<code class="descname">name</code><em class="property"> = 'google_spider'</em><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.number">
+<code class="descname">number</code><em class="property"> = 1</em><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/google_spider.html#GoogleSpider.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.parse" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This method is in charge of processing the response and
+returning scraped data and/or more URLs to follow.</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>response: The response to parse.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.start_urls">
+<code class="descname">start_urls</code><em class="property"> = ['https://www.google.com.ua/search?site=imghp&amp;tbm=isch&amp;q=%s&amp;oq=%s']</em><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.start_urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.google_spider.GoogleSpider.tag">
+<code class="descname">tag</code><em class="property"> = None</em><a class="headerlink" href="#image_parser.spiders.google_spider.GoogleSpider.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-image_parser.spiders.instagram_spider">
+<span id="image-parser-spiders-instagram-spider-module"></span><h2>image_parser.spiders.instagram_spider module<a class="headerlink" href="#module-image_parser.spiders.instagram_spider" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider">
+<em class="property">class </em><code class="descclassname">image_parser.spiders.instagram_spider.</code><code class="descname">InstagramSpider</code><span class="sig-paren">(</span><em>name=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/instagram_spider.html#InstagramSpider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">scrapy_redis.spiders.RedisSpider</span></code></p>
+<p>Class to parse instagram.com.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>name: Spider name.
+allowed_domains: List of strings containing domains that this spider
+is allowed to crawl.
+start_urls: A list of URLs where the spider will begin to crawl
+from, when no particular URLs are specified.
+tag: Tag name.
+images_quantity: The number of images that need to parse.
+number: Record number counter.
+next_page: Number of the next page, if it exists.</dd>
+</dl>
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.allowed_domains">
+<code class="descname">allowed_domains</code><em class="property"> = ['instagram.com']</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.allowed_domains" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.images_quantity">
+<code class="descname">images_quantity</code><em class="property"> = 5</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.images_quantity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.make_request_from_data">
+<code class="descname">make_request_from_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/instagram_spider.html#InstagramSpider.make_request_from_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.make_request_from_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make request from data.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>data: Data.</dd>
+<dt>Returns:</dt>
+<dd>Transmits URL into the function make_requests_from_url.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.name">
+<code class="descname">name</code><em class="property"> = 'instagram_spider'</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.next_page">
+<code class="descname">next_page</code><em class="property"> = None</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.next_page" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.number">
+<code class="descname">number</code><em class="property"> = 1</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/instagram_spider.html#InstagramSpider.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is in charge of processing the response and
+returning scraped data and/or more URLs to follow.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>response: The response to parse.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.start_urls">
+<code class="descname">start_urls</code><em class="property"> = ['https://www.instagram.com/explore/tags/%s/']</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.start_urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.instagram_spider.InstagramSpider.tag">
+<code class="descname">tag</code><em class="property"> = None</em><a class="headerlink" href="#image_parser.spiders.instagram_spider.InstagramSpider.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-image_parser.spiders.yandex_spider">
+<span id="image-parser-spiders-yandex-spider-module"></span><h2>image_parser.spiders.yandex_spider module<a class="headerlink" href="#module-image_parser.spiders.yandex_spider" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider">
+<em class="property">class </em><code class="descclassname">image_parser.spiders.yandex_spider.</code><code class="descname">YandexSpider</code><span class="sig-paren">(</span><em>name=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/yandex_spider.html#YandexSpider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">scrapy_redis.spiders.RedisSpider</span></code></p>
+<p>Class to parse yandex.ua.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>name: Spider name.
+allowed_domains: List of strings containing domains that this spider
+is allowed to crawl.
+start_urls: A list of URLs where the spider will begin to crawl
+from, when no particular URLs are specified.
+tag: Tag name.
+images_quantity: The number of images that need to parse.
+number: Record number counter.</dd>
+</dl>
+<dl class="attribute">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.allowed_domains">
+<code class="descname">allowed_domains</code><em class="property"> = ['yandex.ua']</em><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.allowed_domains" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.images_quantity">
+<code class="descname">images_quantity</code><em class="property"> = 5</em><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.images_quantity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.make_request_from_data">
+<code class="descname">make_request_from_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/yandex_spider.html#YandexSpider.make_request_from_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.make_request_from_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make request from data.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>data: Data.</dd>
+<dt>Returns:</dt>
+<dd>Transmits URL into the function make_requests_from_url.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.name">
+<code class="descname">name</code><em class="property"> = 'yandex_spider'</em><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.number">
+<code class="descname">number</code><em class="property"> = 1</em><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/image_parser/spiders/yandex_spider.html#YandexSpider.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is in charge of processing the response and
+returning scraped data and/or more URLs to follow.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>response: The response to parse.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.start_urls">
+<code class="descname">start_urls</code><em class="property"> = ['https://yandex.ua/images/search?text=%s']</em><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.start_urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="image_parser.spiders.yandex_spider.YandexSpider.tag">
+<code class="descname">tag</code><em class="property"> = None</em><a class="headerlink" href="#image_parser.spiders.yandex_spider.YandexSpider.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-image_parser.spiders">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-image_parser.spiders" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">image_parser.spiders package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-image_parser.spiders.google_spider">image_parser.spiders.google_spider module</a></li>
+<li><a class="reference internal" href="#module-image_parser.spiders.instagram_spider">image_parser.spiders.instagram_spider module</a></li>
+<li><a class="reference internal" href="#module-image_parser.spiders.yandex_spider">image_parser.spiders.yandex_spider module</a></li>
+<li><a class="reference internal" href="#module-image_parser.spiders">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="image_parser.html">image_parser package</a><ul>
+      <li>Previous: <a href="image_parser.html" title="previous chapter">image_parser package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/image_parser.spiders.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Natasha Kuskova.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/image_parser.spiders.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

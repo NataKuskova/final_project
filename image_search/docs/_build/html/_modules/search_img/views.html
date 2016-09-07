@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>search_img.views &#8212; image_search 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="image_search 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for search_img.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_list_or_404</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="k">import</span> <span class="n">FormView</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="k">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">ListView</span><span class="p">,</span> <span class="n">TemplateView</span>
+<span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">from</span> <span class="nn">search_img.models</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="SearchView"><a class="viewcode-back" href="../../search_img.html#search_img.views.SearchView">[docs]</a><span class="k">class</span> <span class="nc">SearchView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for displaying the field for searching images and</span>
+<span class="sd">    users&#39; search history.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        template_name: A template name for displaying.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;index.html&#39;</span>
+
+<div class="viewcode-block" id="SearchView.get"><a class="viewcode-back" href="../../search_img.html#search_img.views.SearchView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks whether the current tag in the session and if it has</span>
+<span class="sd">        a &#39;scheduled&#39; status, changes it to &#39;ready&#39;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request: The requested data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Template with users&#39; search history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;tags&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;current_tag&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;current_tag&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> \
+                            <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;scheduled&#39;</span><span class="p">:</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ready&#39;</span>
+
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">,</span>
+                          <span class="p">{</span><span class="s1">&#39;tag_history&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SearchView.post"><a class="viewcode-back" href="../../search_img.html#search_img.views.SearchView.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks the tag entered by a user, checks its availability  in</span>
+<span class="sd">        the database, if there is no, add it to the database and redis.</span>
+<span class="sd">        Adds the tag&#39;s name and its status into the session.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request: The requested data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Template with users&#39; search history.</span>
+<span class="sd">            If the tag is empty, returns an error message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">input_tag</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">input_tag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">input_tag</span><span class="p">)</span>
+                <span class="n">images</span> <span class="o">=</span> <span class="n">SearchResult</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="n">input_tag</span><span class="p">)</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;ready&#39;</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create_tag</span><span class="p">(</span><span class="n">input_tag</span><span class="p">)</span>
+
+                <span class="n">spider_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;google_spider&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;yandex_spider&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;instagram_spider&#39;</span><span class="p">]</span>
+
+                <span class="n">r</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">StrictRedis</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">spider</span> <span class="ow">in</span> <span class="n">spider_list</span><span class="p">:</span>
+                    <span class="n">r</span><span class="o">.</span><span class="n">lpush</span><span class="p">(</span><span class="n">spider</span> <span class="o">+</span> <span class="s1">&#39;:start_urls&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;{&quot;tag&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">input_tag</span> <span class="o">+</span> <span class="s1">&#39;&quot;, &#39;</span>
+                            <span class="s1">&#39;&quot;images_quantity&quot;: 5}&#39;</span><span class="p">)</span>
+
+                <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;scheduled&#39;</span>
+
+            <span class="k">if</span> <span class="s1">&#39;tags&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">:</span>
+                <span class="n">session</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span>
+                <span class="n">exist</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">session</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">input_tag</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span>
+                        <span class="n">exist</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">exist</span><span class="p">:</span>
+                    <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">session</span>
+                    <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">input_tag</span><span class="p">,</span>
+                                                 <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">}]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">input_tag</span><span class="p">,</span>
+                                             <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">}]</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;current_tag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_tag</span>
+
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;all.html&#39;</span><span class="p">,</span>
+                          <span class="p">{</span><span class="s1">&#39;current_tag&#39;</span><span class="p">:</span> <span class="n">input_tag</span><span class="p">,</span>
+                           <span class="s1">&#39;tag_history&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]}</span>
+                          <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;all.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Enter a tag!&#39;</span><span class="p">})</span></div></div>
+
+
+<div class="viewcode-block" id="ResultView"><a class="viewcode-back" href="../../search_img.html#search_img.views.ResultView">[docs]</a><span class="k">class</span> <span class="nc">ResultView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for displaying images search results.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        model: The name of the model class.</span>
+<span class="sd">        context_object_name: Specifies the context variable to use.</span>
+<span class="sd">        template_name: A template name for displaying.</span>
+<span class="sd">        paginate_by: Number of elements that will be displayed on one page.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SearchResult</span>
+    <span class="n">context_object_name</span> <span class="o">=</span> <span class="s1">&#39;images&#39;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;result.html&#39;</span>
+    <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">12</span>
+
+<div class="viewcode-block" id="ResultView.get_queryset"><a class="viewcode-back" href="../../search_img.html#search_img.views.ResultView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        It filters the results.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             A list of filtered images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ResultView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span>
+        <span class="n">input_tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">input_tag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SearchResult</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">input_tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">queryset</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Natasha Kuskova.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

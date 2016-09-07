@@ -8,10 +8,21 @@ from scrapy.item import Item, Field
 
 
 class ImageParserItem(Item):
-    # define the fields for your item here like:
-    # name = Field()
+    """
+    Class for define the fields for item.
+
+    Attributes:
+        image_url: Image link.
+        site: A site that has found the image.
+        tag: Tag name.
+        date: Search date.
+        rank: Rank image by relevance.
+        images_quantity: The number of images.
+    """
+
     image_url = Field()
     site = Field()
     tag = Field()
     date = Field()
     rank = Field()
+    images_quantity = Field()

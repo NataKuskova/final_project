@@ -1,0 +1,605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>search_img package &#8212; image_search 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="image_search 1.0 documentation" href="index.html" />
+    <link rel="next" title="search_img.migrations package" href="search_img.migrations.html" />
+    <link rel="prev" title="Welcome to image_search’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="search-img-package">
+<h1>search_img package<a class="headerlink" href="#search-img-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="search_img.migrations.html">search_img.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="search_img.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_img.migrations.html#module-search_img.migrations.0001_initial">search_img.migrations.0001_initial module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_img.migrations.html#module-search_img.migrations.0002_auto_20160831_1330">search_img.migrations.0002_auto_20160831_1330 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_img.migrations.html#module-search_img.migrations.0003_auto_20160831_1905">search_img.migrations.0003_auto_20160831_1905 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_img.migrations.html#module-search_img.migrations.0004_auto_20160905_1733">search_img.migrations.0004_auto_20160905_1733 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_img.migrations.html#module-search_img.migrations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-search_img.admin">
+<span id="search-img-admin-module"></span><h2>search_img.admin module<a class="headerlink" href="#module-search_img.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="search_img.admin.SearchResultAdmin">
+<em class="property">class </em><code class="descclassname">search_img.admin.</code><code class="descname">SearchResultAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/admin.html#SearchResultAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.admin.SearchResultAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<p>Class to display search results in the admin panel.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>list_display: Set which fields are displayed on the change list page
+of the admin.</dd>
+</dl>
+<dl class="attribute">
+<dt id="search_img.admin.SearchResultAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['id', 'rank', 'tag', 'image_url', 'site', 'date']</em><a class="headerlink" href="#search_img.admin.SearchResultAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.admin.SearchResultAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#search_img.admin.SearchResultAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="search_img.admin.TagAdmin">
+<em class="property">class </em><code class="descclassname">search_img.admin.</code><code class="descname">TagAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/admin.html#TagAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.admin.TagAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<p>Class to display the tags in the admin panel.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>list_display: Set which fields are displayed on the change list page
+of the admin.</dd>
+</dl>
+<dl class="attribute">
+<dt id="search_img.admin.TagAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['id', 'name', 'status_google', 'status_yandex', 'status_instagram']</em><a class="headerlink" href="#search_img.admin.TagAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.admin.TagAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#search_img.admin.TagAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-search_img.apps">
+<span id="search-img-apps-module"></span><h2>search_img.apps module<a class="headerlink" href="#module-search_img.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="search_img.apps.SearchImgConfig">
+<em class="property">class </em><code class="descclassname">search_img.apps.</code><code class="descname">SearchImgConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/apps.html#SearchImgConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.apps.SearchImgConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="search_img.apps.SearchImgConfig.name">
+<code class="descname">name</code><em class="property"> = 'search_img'</em><a class="headerlink" href="#search_img.apps.SearchImgConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-search_img.models">
+<span id="search-img-models-module"></span><h2>search_img.models module<a class="headerlink" href="#module-search_img.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="search_img.models.SearchResult">
+<em class="property">class </em><code class="descclassname">search_img.models.</code><code class="descname">SearchResult</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/models.html#SearchResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.SearchResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Model for storing the search results.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>tag: Tag id.
+image_url: Image link.
+site: A site that has found the image.
+date: Search date.
+rank: Rank image by relevance.
+objects: Instance of class SearchResultManager.</dd>
+</dl>
+<dl class="exception">
+<dt id="search_img.models.SearchResult.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#search_img.models.SearchResult.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="search_img.models.SearchResult.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descclassname">SearchResult.</code><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#search_img.models.SearchResult.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.SearchResult.get_next_by_date">
+<code class="descclassname">SearchResult.</code><code class="descname">get_next_by_date</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#search_img.models.SearchResult.get_next_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.SearchResult.get_previous_by_date">
+<code class="descclassname">SearchResult.</code><code class="descname">get_previous_by_date</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#search_img.models.SearchResult.get_previous_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.SearchResult.objects">
+<code class="descclassname">SearchResult.</code><code class="descname">objects</code><em class="property"> = &lt;search_img.models.SearchResultManager object&gt;</em><a class="headerlink" href="#search_img.models.SearchResult.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.SearchResult.tag">
+<code class="descclassname">SearchResult.</code><code class="descname">tag</code><a class="headerlink" href="#search_img.models.SearchResult.tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="search_img.models.SearchResultManager">
+<em class="property">class </em><code class="descclassname">search_img.models.</code><code class="descname">SearchResultManager</code><a class="reference internal" href="_modules/search_img/models.html#SearchResultManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.SearchResultManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<p>This is the interface through which database query operations
+are provided to models.</p>
+<dl class="method">
+<dt id="search_img.models.SearchResultManager.get_list">
+<code class="descname">get_list</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/models.html#SearchResultManager.get_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.SearchResultManager.get_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of search results.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name: Tag name.</dd>
+<dt>Returns:</dt>
+<dd>The result of filter() on a given model manager
+cast to a list, raising Http404 if the resulting list is empty.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.SearchResultManager.get_results">
+<code class="descname">get_results</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/models.html#SearchResultManager.get_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.SearchResultManager.get_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of search results.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name: Tag name.</dd>
+<dt>Returns:</dt>
+<dd>The list of search results sorted by rank.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="search_img.models.Tag">
+<em class="property">class </em><code class="descclassname">search_img.models.</code><code class="descname">Tag</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/models.html#Tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.Tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Model for storing the tag names and status.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>name: Tag name.
+status_google: The status of Google parsing.
+status_yandex: The status of Yandex parsing.
+status_instagram: The status of Instagram parsing.
+objects: Instance of class TagManager.</dd>
+</dl>
+<dl class="exception">
+<dt id="search_img.models.Tag.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#search_img.models.Tag.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="search_img.models.Tag.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descclassname">Tag.</code><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#search_img.models.Tag.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.Tag.READY">
+<code class="descclassname">Tag.</code><code class="descname">READY</code><em class="property"> = 'ready'</em><a class="headerlink" href="#search_img.models.Tag.READY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.Tag.SCHEDULED">
+<code class="descclassname">Tag.</code><code class="descname">SCHEDULED</code><em class="property"> = 'scheduled'</em><a class="headerlink" href="#search_img.models.Tag.SCHEDULED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.Tag.STATUS_CHOICES">
+<code class="descclassname">Tag.</code><code class="descname">STATUS_CHOICES</code><em class="property"> = (('scheduled', 'Scheduled'), ('ready', 'Ready'))</em><a class="headerlink" href="#search_img.models.Tag.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.Tag.get_status_google_display">
+<code class="descclassname">Tag.</code><code class="descname">get_status_google_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#search_img.models.Tag.get_status_google_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.Tag.get_status_instagram_display">
+<code class="descclassname">Tag.</code><code class="descname">get_status_instagram_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#search_img.models.Tag.get_status_instagram_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.Tag.get_status_yandex_display">
+<code class="descclassname">Tag.</code><code class="descname">get_status_yandex_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#search_img.models.Tag.get_status_yandex_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.Tag.objects">
+<code class="descclassname">Tag.</code><code class="descname">objects</code><em class="property"> = &lt;search_img.models.TagManager object&gt;</em><a class="headerlink" href="#search_img.models.Tag.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.models.Tag.searchresult_set">
+<code class="descclassname">Tag.</code><code class="descname">searchresult_set</code><a class="headerlink" href="#search_img.models.Tag.searchresult_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="search_img.models.TagManager">
+<em class="property">class </em><code class="descclassname">search_img.models.</code><code class="descname">TagManager</code><a class="reference internal" href="_modules/search_img/models.html#TagManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.TagManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.manager.Manager</span></code></p>
+<p>This is the interface through which database query operations
+are provided to models.</p>
+<dl class="method">
+<dt id="search_img.models.TagManager.get_or_create_tag">
+<code class="descname">get_or_create_tag</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/models.html#TagManager.get_or_create_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.TagManager.get_or_create_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>If tag is no in the database, add it.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name: Tag name.</dd>
+<dt>Returns:</dt>
+<dd>The tag by name if the tag does not exist raises Http404 exception.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.models.TagManager.get_tag">
+<code class="descname">get_tag</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/models.html#TagManager.get_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.models.TagManager.get_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the tag by name.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name: Tag name.</dd>
+<dt>Returns:</dt>
+<dd>The tag by name if the tag does not exist raises Http404 exception.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-search_img.server">
+<span id="search-img-server-module"></span><h2>search_img.server module<a class="headerlink" href="#module-search_img.server" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="search_img.server.ServerProtocol">
+<em class="property">class </em><code class="descclassname">search_img.server.</code><code class="descname">ServerProtocol</code><a class="reference internal" href="_modules/search_img/server.html#ServerProtocol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.ServerProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">autobahn.asyncio.websocket.WebSocketServerProtocol</span></code></p>
+<p>Class for asyncio-based WebSocket server protocols.</p>
+<dl class="method">
+<dt id="search_img.server.ServerProtocol.onClose">
+<code class="descname">onClose</code><span class="sig-paren">(</span><em>wasClean</em>, <em>code</em>, <em>reason</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#ServerProtocol.onClose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.ServerProtocol.onClose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback fired when the WebSocket connection has been closed
+(WebSocket closing handshake has been finished or the connection
+was closed uncleanly).</p>
+<p>Removes the client from the list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>wasClean: <cite>True</cite> if the WebSocket connection was closed cleanly.
+code: Close status code as sent by the WebSocket peer.
+reason: Close reason as sent by the WebSocket peer.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.server.ServerProtocol.onConnect">
+<code class="descname">onConnect</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#ServerProtocol.onConnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.ServerProtocol.onConnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback fired during WebSocket opening handshake when a client connects (to a server with
+request from client) or when server connection established (by a client with response from
+server). This method may run asynchronous code.</p>
+<p>Adds a client to a list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>request: WebSocket connection request information.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.server.ServerProtocol.onMessage">
+<code class="descname">onMessage</code><span class="sig-paren">(</span><em>payload</em>, <em>isBinary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#ServerProtocol.onMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.ServerProtocol.onMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback fired when a complete WebSocket message was received.</p>
+<p>Saved the client address.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>payload: The WebSocket message received.
+isBinary: <cite>True</cite> if payload is binary, else the payload
+is UTF-8 encoded text.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.server.ServerProtocol.onOpen">
+<code class="descname">onOpen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#ServerProtocol.onOpen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.ServerProtocol.onOpen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback fired when the initial WebSocket opening handshake was
+completed.</p>
+<p>Sends a WebSocket message to the client with its address.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="search_img.server.WebSocketFactory">
+<em class="property">class </em><code class="descclassname">search_img.server.</code><code class="descname">WebSocketFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#WebSocketFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.WebSocketFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">autobahn.asyncio.websocket.WebSocketServerFactory</span></code></p>
+<p>Class for asyncio-based WebSocket server factories.</p>
+<dl class="method">
+<dt id="search_img.server.WebSocketFactory.get_client">
+<code class="descname">get_client</code><span class="sig-paren">(</span><em>id_connection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#WebSocketFactory.get_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.WebSocketFactory.get_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receives the client instance.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>id_connection: Address of the client.</dd>
+<dt>Returns:</dt>
+<dd>The client instance.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.server.WebSocketFactory.register_client">
+<code class="descname">register_client</code><span class="sig-paren">(</span><em>id_connection</em>, <em>instance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#WebSocketFactory.register_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.WebSocketFactory.register_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a client to a list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>id_connection: Address of the client.
+instance: Instance of the class Server Protocol.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.server.WebSocketFactory.unregister_client">
+<code class="descname">unregister_client</code><span class="sig-paren">(</span><em>id_connection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#WebSocketFactory.unregister_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.WebSocketFactory.unregister_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the client from the list when a connection is closed.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>id_connection: Address of the client.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="search_img.server.run_subscriber">
+<code class="descclassname">search_img.server.</code><code class="descname">run_subscriber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/server.html#run_subscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.server.run_subscriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronous Redis client. Start a pubsub listener.
+It receives signals from the spiders and sends a message to the client.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-search_img.tests">
+<span id="search-img-tests-module"></span><h2>search_img.tests module<a class="headerlink" href="#module-search_img.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-search_img.urls">
+<span id="search-img-urls-module"></span><h2>search_img.urls module<a class="headerlink" href="#module-search_img.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-search_img.views">
+<span id="search-img-views-module"></span><h2>search_img.views module<a class="headerlink" href="#module-search_img.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="search_img.views.ResultView">
+<em class="property">class </em><code class="descclassname">search_img.views.</code><code class="descname">ResultView</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/views.html#ResultView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.views.ResultView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.list.ListView</span></code></p>
+<p>Class for displaying images search results.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>model: The name of the model class.
+context_object_name: Specifies the context variable to use.
+template_name: A template name for displaying.
+paginate_by: Number of elements that will be displayed on one page.</dd>
+</dl>
+<dl class="attribute">
+<dt id="search_img.views.ResultView.context_object_name">
+<code class="descname">context_object_name</code><em class="property"> = 'images'</em><a class="headerlink" href="#search_img.views.ResultView.context_object_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="search_img.views.ResultView.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/views.html#ResultView.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.views.ResultView.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>It filters the results.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A list of filtered images.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.views.ResultView.model">
+<code class="descname">model</code><a class="headerlink" href="#search_img.views.ResultView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">SearchResult</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.views.ResultView.paginate_by">
+<code class="descname">paginate_by</code><em class="property"> = 12</em><a class="headerlink" href="#search_img.views.ResultView.paginate_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.views.ResultView.template_name">
+<code class="descname">template_name</code><em class="property"> = 'result.html'</em><a class="headerlink" href="#search_img.views.ResultView.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="search_img.views.SearchView">
+<em class="property">class </em><code class="descclassname">search_img.views.</code><code class="descname">SearchView</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/views.html#SearchView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.views.SearchView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.base.TemplateView</span></code></p>
+<p>Class for displaying the field for searching images and
+users&#8217; search history.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>template_name: A template name for displaying.</dd>
+</dl>
+<dl class="method">
+<dt id="search_img.views.SearchView.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/views.html#SearchView.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.views.SearchView.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the current tag in the session and if it has
+a &#8216;scheduled&#8217; status, changes it to &#8216;ready&#8217;.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>request: The requested data.</dd>
+<dt>Returns:</dt>
+<dd>Template with users&#8217; search history.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="search_img.views.SearchView.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/search_img/views.html#SearchView.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_img.views.SearchView.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the tag entered by a user, checks its availability  in
+the database, if there is no, add it to the database and redis.
+Adds the tag&#8217;s name and its status into the session.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>request: The requested data.</dd>
+<dt>Returns:</dt>
+<dd>Template with users&#8217; search history.
+If the tag is empty, returns an error message.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="search_img.views.SearchView.template_name">
+<code class="descname">template_name</code><em class="property"> = 'index.html'</em><a class="headerlink" href="#search_img.views.SearchView.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-search_img">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-search_img" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">search_img package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-search_img.admin">search_img.admin module</a></li>
+<li><a class="reference internal" href="#module-search_img.apps">search_img.apps module</a></li>
+<li><a class="reference internal" href="#module-search_img.models">search_img.models module</a></li>
+<li><a class="reference internal" href="#module-search_img.server">search_img.server module</a></li>
+<li><a class="reference internal" href="#module-search_img.tests">search_img.tests module</a></li>
+<li><a class="reference internal" href="#module-search_img.urls">search_img.urls module</a></li>
+<li><a class="reference internal" href="#module-search_img.views">search_img.views module</a></li>
+<li><a class="reference internal" href="#module-search_img">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to image_search&#8217;s documentation!</a></li>
+      <li>Next: <a href="search_img.migrations.html" title="next chapter">search_img.migrations package</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/search_img.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Natasha Kuskova.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/search_img.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
