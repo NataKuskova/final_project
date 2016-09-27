@@ -18,13 +18,17 @@ table{
     margin-top: 50px;
     text-align: center;
 }
+.form form p{
+    width: 270px;
+    display: inline-block;
+}
 .content{
     padding: 20px;
 }
 .content h1{
     text-align: center;
 }
-#tag{
+#id_tag{
     border: 1px solid #d4d4d4;
     padding: 5px 8px;
 }

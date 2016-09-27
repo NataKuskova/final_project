@@ -4,9 +4,10 @@
 
 {% block content %}
     <div class="form">
-        <form action="{% url 'index' %}" method="post">{% csrf_token %}
-            <label for="tag">Enter a tag: </label>
-            <input type="text" name="tag" id="tag" value="{%if current_tag %}{{current_tag}}{% endif %}" required>
+        <form action="{% url 'index' %}" method="post" id="search_form">{% csrf_token %}
+            <!--<label for="tag">Enter a tag: </label>-->
+            <!--<input type="text" name="tag" id="tag" value="{#if current_tag #}{#current_tag#}{# endif #}" required>-->
+            {{ form.as_p }}
             <input type="submit" value='Search' name="search" class="button" id="search"/>
         </form>
     </div>

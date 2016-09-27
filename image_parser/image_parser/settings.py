@@ -75,7 +75,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
    'image_parser.pipelines.ImageParserPipeline': 300,
    # 'image_parser.pipelines.ChangeStatusPipeline': 400,
-   'scrapy_redis.pipelines.RedisPipeline': 400,
+   # 'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

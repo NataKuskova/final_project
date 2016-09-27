@@ -4,11 +4,12 @@ from autobahn.asyncio.websocket import WebSocketServerProtocol, \
 import asyncio
 import asyncio_redis
 import logging
+import json
 
 
 FORMAT = u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s ' \
          u'[%(asctime)s]  %(message)s'
-logging.basicConfig(format=FORMAT, level=logging.DEBUG, filename=u'../logs.log')
+logging.basicConfig(format=FORMAT, level=logging.DEBUG)  # filename=u'../logs.log'
 
 
 client_id = None
@@ -97,11 +98,12 @@ class ServerProtocol(WebSocketServerProtocol):
             isBinary: `True` if payload is binary, else the payload
             is UTF-8 encoded text.
         """
-        logging.info("Message received: {0}".format(payload.decode('utf8')))
+        payload = json.loads(payload.decode('utf8'))
+        logging.info("Message received: {0}".format(payload))
 
         self.sendMessage(payload, isBinary)
         global client_id
-        client_id = payload.decode('utf8')
+        client_id = payload['id']
 
     def onClose(self, wasClean, code, reason):
         """
@@ -144,14 +146,30 @@ def run_subscriber():
 
         spiders.append(str(reply.value))
         if spiders:
-            if 'google' in spiders and 'yandex' in spiders \
-                    and 'instagram' in spiders:
-                if client_id is not None:
+            if client_id is not None:
+                try:
+                    if 'google' in spiders:
+                        # and 'yandex' in spiders \
+                        # and 'instagram' in spiders:
+                        factory.get_client(client_id).sendMessage(
+                            'ok'.encode('utf8'), False)
+                        spiders.clear()
+                    # elif 'google' in spiders:
+                    #     factory.get_client(client_id).sendMessage(
+                    #         'google'.encode('utf8'), False)
+                    # elif 'yandex' in spiders:
+                    #     factory.get_client(client_id).sendMessage(
+                    #         'yandex'.encode('utf8'), False)
+                    # elif 'instagram' in spiders:
+                    #     factory.get_client(client_id).sendMessage(
+                    #         'instagram'.encode('utf8'), False)
+                except:
                     factory.get_client(client_id).sendMessage(
-                        'ok'.encode('utf8'), False)
-                    spiders.clear()
+                        'error'.encode('utf8'), False)
+
         logging.info('Received: ' + repr(reply.value) + ' on channel ' +
                      reply.channel)
+
 
     # When finished, close the connection.
     connection.close()

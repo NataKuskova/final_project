@@ -1,18 +1,22 @@
 from django.shortcuts import render, get_list_or_404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, HttpResponseRedirect
 from django.views.generic.edit import FormView
 from django.views.generic import View, ListView, TemplateView
+from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponse
+from django.template import loader
 import redis
 import logging
 from search_img.models import *
+from search_img.forms import *
 
 
 FORMAT = u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s ' \
          u'[%(asctime)s]  %(message)s'
-logging.basicConfig(format=FORMAT, level=logging.DEBUG, filename=u'logs.log')
+logging.basicConfig(format=FORMAT, level=logging.DEBUG)  # filename=u'logs.log'
 
 
-class SearchView(TemplateView):
+class SearchView(FormView):
     """
     Class for displaying the field for searching images and
     users' search history.
@@ -22,106 +26,62 @@ class SearchView(TemplateView):
     """
 
     template_name = 'index.html'
+    form_class = SearchForm
+    # success_url = reverse_lazy('index')
 
-    def get(self, request, *args, **kwargs):
-        """
-        Checks whether the current tag in the session and if it has
-        a 'scheduled' status, changes it to 'ready'.
-
-        Args:
-            request: The requested data.
-
-        Returns:
-            Template with users' search history.
-        """
-        if 'tags' in request.session:
-            if 'current_tag' in request.session:
-                for item in request.session['tags']:
-                    if request.session['current_tag'] in item['name'] \
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        if 'tags' in self.request.session:
+            if 'current_tag' in self.request.session:
+                for item in self.request.session['tags']:
+                    if self.request.session['current_tag'] in item['name'] \
                             and item['status'] == 'scheduled':
                         item['status'] = 'ready'
                         logging.debug('Set the status "' + item['status'] +
                                       '" for the tag "' +
-                                      request.session['current_tag'] + '".')
+                                      self.request.session['current_tag'] + '".')
 
             logging.info('Successful displaying the field for searching '
                          'images and users search history.')
-            return render(request, 'index.html',
-                          {'tag_history': request.session['tags']})
-        return render(request, 'index.html')
+            context['tag_history'] = self.request.session['tags']
+        return context
 
-    def post(self, request, *args, **kwargs):
-        """
-        Checks the tag entered by a user, checks its availability  in
-        the database, if there is no, add it to the database and redis.
-        Adds the tag's name and its status into the session.
+    def form_invalid(self, form):
+        print(form)
+        return HttpResponse('invalid')
 
-        Args:
-            request: The requested data.
-
-        Returns:
-            Template with users' search history.
-            If the tag is empty, returns an error message.
-        """
-        status = 'scheduled'
-        input_tag = request.POST.get('tag', None)
-        if input_tag is not None:
-            try:
-                tag = Tag.objects.get_tag(input_tag)
-                images = SearchResult.objects.get_list(input_tag)
-                status = 'ready'
-                logging.info('The tag and the search results for the tag '
-                             'present in the database.')
-                logging.debug('Set the status "' + status +
-                              '" for the tag "' + tag.name + '".')
-            except:
-                tag = Tag.objects.get_or_create_tag(input_tag)
-
-                spider_list = ['google_spider',
-                               'yandex_spider',
-                               'instagram_spider']
-                try:
-                    r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
-
-                    for spider in spider_list:
-                        r.lpush(spider + ':start_urls',
-                                '{"tag": "' + input_tag + '", '
-                                '"images_quantity": 5}')
-                    logging.info('Tag "' + tag.name + '" is successfully transmitted to spiders.')
-
-                    status = 'scheduled'
-                    logging.debug('Set the status "' + status +
-                                  '" for the tag "' + tag.name + '".')
-                except:
-                    logging.error('Something went wrong.')
-
-            if 'tags' in request.session:
-                session = request.session['tags']
+    def form_valid(self, form):
+        if form.save():
+            tag = form.save()
+            if 'tags' in self.request.session:
+                session = self.request.session['tags']
                 exist = False
                 for item in session:
-                    if input_tag in item['name']:
+                    if tag['name'] in item['name']:
                         exist = True
                 if not exist:
-                    request.session['tags'] = []
-                    request.session['tags'] = session
-                    request.session['tags'] += [{'name': input_tag,
-                                                 'status': status}]
+                    self.request.session['tags'] = []
+                    self.request.session['tags'] = session
+                    self.request.session['tags'] += [{'name': tag['name'],
+                                                      'status': tag['status']}]
             else:
-                request.session['tags'] = []
-                request.session['tags'] += [{'name': input_tag,
-                                             'status': status}]
-            request.session['current_tag'] = input_tag
+                self.request.session['tags'] = []
+                self.request.session['tags'] += [{'name': tag['name'],
+                                                  'status': tag['status']}]
+            self.request.session['current_tag'] = tag['name']
 
-            logging.info('Tag "' + input_tag + '" is added to the session.')
+            logging.info('Tag "' + tag['name'] + '" is added to the session.')
 
             logging.info('Successful displaying users search history.')
-            return render(request, 'all.html',
-                          {'current_tag': input_tag,
-                           'tag_history': request.session['tags']}
+
+            return render(self.request, 'all.html',
+                          {'current_tag': tag['name'],
+                           'tag_history': self.request.session['tags']}
                           )
         else:
-            logging.error('The tag is empty.')
-            return render(request, 'all.html', {'error': 'Enter a tag!'})
+            logging.error('Something went wrong.')
+            # logging.error('The tag is empty.')
+            return render(self.request, 'all.html', {'error': 'Enter a tag!'})
 
 
 class ResultView(ListView):
@@ -152,7 +112,7 @@ class ResultView(ListView):
         input_tag = self.request.GET.get('tag', None)
         if input_tag is not None:
             logging.info('Successful display of results.')
-            return SearchResult.objects.get_results(input_tag)
+            return SearchResult.objects.get_list(input_tag)
         else:
             logging.error('Empty tag!')
         return queryset

@@ -19,6 +19,10 @@ class ImageParserPipeline(object):
     """
 
     num = 1
+    redis = None
+
+    def __init__(self):
+        self.redis = redis.StrictRedis(host='127.0.0.1', port=6379)
 
     def process_item(self, item, spider):
         """
@@ -39,19 +43,18 @@ class ImageParserPipeline(object):
                                     rank=item['rank'])
 
         if self.num == item['images_quantity']:
-            r = redis.StrictRedis(host='127.0.0.1', port=6379)
             if 'google' in item['site']:
                 Tag.objects.filter(name=item['tag']).update(
                     status_google='ready')
-                r.publish('spiders', 'google')
+                self.redis.publish('spiders', 'google')
             elif 'yandex' in item['site']:
                 Tag.objects.filter(name=item['tag']).update(
                     status_yandex='ready')
-                r.publish('spiders', 'yandex')
+                self.redis.publish('spiders', 'yandex')
             else:
                 Tag.objects.filter(name=item['tag']).update(
                     status_instagram='ready')
-                r.publish('spiders', 'instagram')
+                self.redis.publish('spiders', 'instagram')
             self.num = 1
         else:
             self.num += 1
