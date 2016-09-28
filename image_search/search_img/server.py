@@ -12,7 +12,7 @@ FORMAT = u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s ' \
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)  # filename=u'../logs.log'
 
 
-client_id = None
+# tags = {}
 
 
 class WebSocketFactory(WebSocketServerFactory):
@@ -20,9 +20,9 @@ class WebSocketFactory(WebSocketServerFactory):
     Class for asyncio-based WebSocket server factories.
     """
 
-    _clients = {}
+    _tags = {}
 
-    def register_client(self, id_connection, instance):
+    def register_client(self, tag, id_connection, instance):
         """
         Adds a client to a list.
 
@@ -30,9 +30,18 @@ class WebSocketFactory(WebSocketServerFactory):
             id_connection: Address of the client.
             instance: Instance of the class Server Protocol.
         """
-        self._clients[id_connection] = instance
+        # self._tags[tag].setdefault(id_connection, instance)
+        # self._tags.setdefault(tag, {id_connection: instance})
+        if tag not in self._tags:
+            self._tags[tag] = [{id_connection: instance}]
+        else:
+            tags = self._tags[tag]
+            self._tags[tag] = []
+            self._tags[tag] = tags
+            self._tags[tag] += [{id_connection: instance}]
+        print(self._tags)
 
-    def get_client(self, id_connection):
+    def get_client(self, tag):
         """
         Receives the client instance.
 
@@ -42,7 +51,7 @@ class WebSocketFactory(WebSocketServerFactory):
         Returns:
             The client instance.
         """
-        return self._clients[id_connection]
+        return self._tags[tag]
 
     def unregister_client(self, id_connection):
         """
@@ -51,7 +60,11 @@ class WebSocketFactory(WebSocketServerFactory):
         Args:
              id_connection: Address of the client.
         """
-        del(self._clients[id_connection])
+        # self._tags = {k: v for k, v in self._tags.items() if not v}
+        for tag, client in self._tags.items():
+            if id_connection in client:
+                del(self._tags[tag][id_connection])
+
         logging.info('Connection {0} is closed.'.format(id_connection))
 
 
@@ -73,9 +86,9 @@ class ServerProtocol(WebSocketServerProtocol):
             request: WebSocket connection request information.
         """
         logging.info("Client connecting: {0}".format(request.peer))
-        self.factory.register_client(request.peer, self)
-        global client_id
-        client_id = request.peer
+        # self.factory.register_client(request.peer, self)
+        # global tags
+        # tags = request.peer
 
     def onOpen(self):
         """
@@ -85,7 +98,7 @@ class ServerProtocol(WebSocketServerProtocol):
         Sends a WebSocket message to the client with its address.
         """
         logging.info("WebSocket connection open.")
-        self.sendMessage(client_id.encode('utf8'), False)
+        # self.sendMessage(clients.encode('utf8'), False)
 
     def onMessage(self, payload, isBinary):
         """
@@ -98,12 +111,12 @@ class ServerProtocol(WebSocketServerProtocol):
             isBinary: `True` if payload is binary, else the payload
             is UTF-8 encoded text.
         """
-        payload = json.loads(payload.decode('utf8'))
-        logging.info("Message received: {0}".format(payload))
+        logging.info("Message received: {0}".format(payload.decode('utf8')))
 
-        self.sendMessage(payload, isBinary)
-        global client_id
-        client_id = payload['id']
+        # self.sendMessage(payload, isBinary)
+        # global clients
+        # clients = payload.decode('utf8')
+        self.factory.register_client(payload.decode('utf8'), self.peer, self)
 
     def onClose(self, wasClean, code, reason):
         """
@@ -143,15 +156,29 @@ def run_subscriber():
     # Inside a while loop, wait for incoming events.
     while True:
         reply = yield from subscriber.next_published()
-
-        spiders.append(str(reply.value))
+        # print(reply.value)
+        # print(json.loads(reply.value))
+        spiders.append(json.loads(reply.value))
         if spiders:
-            if client_id is not None:
+            # if clients is not None:
+            for spider in spiders:
+            # print(spiders[0]['tag'])
+                # for tag in spider['tag']:
+                    # print('tag')
+                    # print(tag)
+                tags = factory.get_client(spider['tag'])
+                for clients in tags:
+                    for client in clients:
+                        clients[client].sendMessage('ok'.encode('utf8'), False)
+
+            # tags.clear()
+            # spiders.clear()
+            """
                 try:
                     if 'google' in spiders:
                         # and 'yandex' in spiders \
                         # and 'instagram' in spiders:
-                        factory.get_client(client_id).sendMessage(
+                        factory.get_client(clients).sendMessage(
                             'ok'.encode('utf8'), False)
                         spiders.clear()
                     # elif 'google' in spiders:
@@ -164,8 +191,9 @@ def run_subscriber():
                     #     factory.get_client(client_id).sendMessage(
                     #         'instagram'.encode('utf8'), False)
                 except:
-                    factory.get_client(client_id).sendMessage(
+                    factory.get_client(clients).sendMessage(
                         'error'.encode('utf8'), False)
+            """
 
         logging.info('Received: ' + repr(reply.value) + ' on channel ' +
                      reply.channel)

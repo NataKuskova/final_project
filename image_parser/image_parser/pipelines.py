@@ -7,6 +7,7 @@
 
 # from django.shortcuts import get_object_or_404
 import redis
+import json
 from search_img.models import *
 
 
@@ -46,7 +47,8 @@ class ImageParserPipeline(object):
             if 'google' in item['site']:
                 Tag.objects.filter(name=item['tag']).update(
                     status_google='ready')
-                self.redis.publish('spiders', 'google')
+                self.redis.publish('spiders', json.dumps({"site": "google",
+                                                          "tag": item['tag']}))
             elif 'yandex' in item['site']:
                 Tag.objects.filter(name=item['tag']).update(
                     status_yandex='ready')
