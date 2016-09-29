@@ -19,11 +19,11 @@ class ImageParserPipeline(object):
         num: Record number counter.
     """
 
-    num = 1
-    redis = None
+    # num = 1
+    # redis = None
 
-    def __init__(self):
-        self.redis = redis.StrictRedis(host='127.0.0.1', port=6379)
+    # def __init__(self):
+    #     self.redis = redis.StrictRedis(host='127.0.0.1', port=6379)
 
     def process_item(self, item, spider):
         """
@@ -43,22 +43,22 @@ class ImageParserPipeline(object):
                                     site=item['site'],
                                     rank=item['rank'])
 
-        if self.num == item['images_quantity']:
-            if 'google' in item['site']:
-                Tag.objects.filter(name=item['tag']).update(
-                    status_google='ready')
-                self.redis.publish('spiders', json.dumps({"site": "google",
-                                                          "tag": item['tag']}))
-            elif 'yandex' in item['site']:
-                Tag.objects.filter(name=item['tag']).update(
-                    status_yandex='ready')
-                self.redis.publish('spiders', 'yandex')
-            else:
-                Tag.objects.filter(name=item['tag']).update(
-                    status_instagram='ready')
-                self.redis.publish('spiders', 'instagram')
-            self.num = 1
-        else:
-            self.num += 1
+        # if self.num == item['images_quantity']:
+        #     if 'google' in item['site']:
+        #         Tag.objects.filter(name=item['tag']).update(
+        #             status_google='ready')
+        #         self.redis.publish('spiders', json.dumps({"site": "google",
+        #                                                   "tag": item['tag']}))
+        #     elif 'yandex' in item['site']:
+        #         Tag.objects.filter(name=item['tag']).update(
+        #             status_yandex='ready')
+        #         self.redis.publish('spiders', 'yandex')
+        #     else:
+        #         Tag.objects.filter(name=item['tag']).update(
+        #             status_instagram='ready')
+        #         self.redis.publish('spiders', 'instagram')
+        #     self.num = 1
+        # else:
+        #     self.num += 1
         return item
 

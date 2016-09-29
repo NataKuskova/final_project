@@ -34,7 +34,7 @@ class SearchForm(forms.Form):
 
                 spider_list = ['google_spider',
                                # 'yandex_spider',
-                               # 'instagram_spider'
+                               'instagram_spider'
                                ]
                 try:
                     r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)

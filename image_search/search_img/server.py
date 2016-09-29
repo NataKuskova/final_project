@@ -12,7 +12,9 @@ FORMAT = u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s ' \
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)  # filename=u'../logs.log'
 
 
-# tags = {}
+tags = {'google': [],
+        'yandex': [],
+        'instagram': []}
 
 
 class WebSocketFactory(WebSocketServerFactory):
@@ -39,9 +41,9 @@ class WebSocketFactory(WebSocketServerFactory):
             self._tags[tag] = []
             self._tags[tag] = tags
             self._tags[tag] += [{id_connection: instance}]
-        print(self._tags)
+        # print(self._tags)
 
-    def get_client(self, tag):
+    def get_tags(self):
         """
         Receives the client instance.
 
@@ -51,7 +53,7 @@ class WebSocketFactory(WebSocketServerFactory):
         Returns:
             The client instance.
         """
-        return self._tags[tag]
+        return self._tags
 
     def unregister_client(self, id_connection):
         """
@@ -60,7 +62,7 @@ class WebSocketFactory(WebSocketServerFactory):
         Args:
              id_connection: Address of the client.
         """
-        # self._tags = {k: v for k, v in self._tags.items() if not v}
+        self._tags = {k: v for k, v in self._tags.items() if not v}
         for tag, client in self._tags.items():
             if id_connection in client:
                 del(self._tags[tag][id_connection])
@@ -150,30 +152,53 @@ def run_subscriber():
     subscriber = yield from connection.start_subscribe()
 
     # Subscribe to channel.
-    yield from subscriber.subscribe(['spiders'])
+    yield from subscriber.subscribe(['google',
+                                     'yandex',
+                                     'instagram'])
 
     spiders = []
     # Inside a while loop, wait for incoming events.
     while True:
         reply = yield from subscriber.next_published()
-        # print(reply.value)
-        # print(json.loads(reply.value))
+
+        global tags
+        if reply.channel == 'google':
+            tags['google'].append(reply.value)
+        # if reply.channel == 'instagram':
+        #     tags['instagram'].append(reply.value)
+        # if reply.channel == 'yandex':
+        #     tags['yandex'].append(reply.value)
+        for tag, clients in factory.get_tags().items():
+            if tag in tags['google']:
+                    # and tag in tags['instagram']:
+                    # and tag in tags['yandex']:
+                for client in clients:
+                    for address in client:
+                        client[address].sendMessage('ok'.encode('utf8'), False)
+                tags['google'].remove(tag)
+                # tags['instagram'].remove(tag)
+                # tags['yandex'].remove(tag)
+        """
         spiders.append(json.loads(reply.value))
+
         if spiders:
             # if clients is not None:
             for spider in spiders:
-            # print(spiders[0]['tag'])
-                # for tag in spider['tag']:
-                    # print('tag')
-                    # print(tag)
                 tags = factory.get_client(spider['tag'])
-                for clients in tags:
-                    for client in clients:
-                        clients[client].sendMessage('ok'.encode('utf8'), False)
+                if 'google' in spider['site'] \
+                        and 'instagram' in spider['site']:
+                        # and 'yandex' in spider['site']:
+                    # print(spiders[0]['tag'])
+                    # for tag in spider['tag']:
+                        # print('tag')
+                        # print(tag)
 
-            # tags.clear()
+                    for clients in tags:
+                        for client in clients:
+                            clients[client].sendMessage('ok'.encode('utf8'), False)
             # spiders.clear()
-            """
+        """
+        """
                 try:
                     if 'google' in spiders:
                         # and 'yandex' in spiders \
@@ -193,11 +218,10 @@ def run_subscriber():
                 except:
                     factory.get_client(clients).sendMessage(
                         'error'.encode('utf8'), False)
-            """
+        """
 
         logging.info('Received: ' + repr(reply.value) + ' on channel ' +
                      reply.channel)
-
 
     # When finished, close the connection.
     connection.close()

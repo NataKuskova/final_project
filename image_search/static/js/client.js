@@ -58,6 +58,7 @@ window.onload = function() {
 };
 
 function send_message(tag, socket) {
+//подождать
     if (isopen) {
 //        socket.send(JSON.stringify({'id': id, 'tag': tag}));
         socket.send(tag);

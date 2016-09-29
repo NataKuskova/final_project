@@ -54,7 +54,7 @@ class SearchResultManager(models.Manager):
                                tag__name=name,
                                tag__status_google='ready',
                                # tag__status_yandex='ready',
-                               # tag__status_instagram='ready'
+                               tag__status_instagram='ready'
                                )
 
     def get_list_exist(self, name):
