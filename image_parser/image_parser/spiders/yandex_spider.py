@@ -2,6 +2,8 @@ import scrapy
 from image_parser.items import ImageParserItem
 from scrapy_redis.spiders import RedisSpider
 import json
+import redis
+from scrapy.http import Request
 
 
 class YandexSpider(RedisSpider):
@@ -22,9 +24,9 @@ class YandexSpider(RedisSpider):
     name = 'yandex_spider'
     allowed_domains = ['yandex.ua']
     start_urls = ['https://yandex.ua/images/search?text=%s']
-    tag = None
+    # tag = None
     images_quantity = 5
-    number = 1
+    # number = 1
 
     def make_request_from_data(self, data):
         """
@@ -39,9 +41,10 @@ class YandexSpider(RedisSpider):
         data = json.loads(data)
         if 'tag' in data and 'images_quantity' in data:
             url = self.start_urls[0] % data['tag']
-            self.tag = data['tag']
+            # self.tag = data['tag']
             self.images_quantity = int(data['images_quantity'])
-            return self.make_requests_from_url(url)
+            # return self.make_requests_from_url(url)
+            return Request(url, dont_filter=True, meta={'tag': data['tag']})
         else:
             self.logger.error("Unexpected data from '%s': %r", self.redis_key,
                               data)
@@ -54,24 +57,32 @@ class YandexSpider(RedisSpider):
         Args:
             response: The response to parse.
         """
+        quantity = response.meta.get('quantity', 0)
         images = response.xpath(
             '//div[contains(@class, "serp-item_type_search")]')
         for img in images:
-            if self.number <= self.images_quantity:
+            if quantity < self.images_quantity:
                 item = ImageParserItem()
-                item['image_url'] = 'https:' + img.xpath('.//a/img/@src').extract()[0]
+                item['image_url'] = 'https:' + \
+                                    img.xpath('.//a/img/@src').extract()[0]
                 item['site'] = 'https://' + self.allowed_domains[0]
-                item['tag'] = self.tag
-                item['rank'] = self.number
-                item['images_quantity'] = self.images_quantity
-                self.number += 1
+                item['tag'] = response.meta['tag']
+                item['rank'] = quantity
+                # item['images_quantity'] = self.images_quantity
+                quantity += 1
                 yield item
             else:
-                self.number = 1
+                # self.number = 1
+                r = redis.StrictRedis(host='127.0.0.1', port=6379)
+                Tag.objects.filter(name=response.meta['tag']).update(
+                    status_yandex='ready')
+                r.publish('yandex', response.meta['tag'])
                 return
 
         next_page = response.xpath(
             '//div[contains(@class, "more_direction_next")]/a/@href').extract()
         if next_page:
             url = response.urljoin(next_page[0])
-            yield scrapy.Request(url, self.parse)
+            yield scrapy.Request(url, self.parse,
+                                 meta={'tag': response.meta['tag'],
+                                       'quantity': quantity})

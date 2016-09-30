@@ -26,11 +26,11 @@ class InstagramSpider(RedisSpider):
     name = 'instagram_spider'
     allowed_domains = ['instagram.com']
     start_urls = ['https://www.instagram.com/explore/tags/%s/']
-    tag = None
+    # tag = None
     images_quantity = 5
-    number = 1
+    # number = 1
     next_page = None
-    finish = True
+    # finish = True
 
     # def __init__(self):
     #     self.finish = True
@@ -46,7 +46,7 @@ class InstagramSpider(RedisSpider):
         Returns:
             Transmits URL into the function make_requests_from_url.
         """
-        self.finish = False
+        # self.finish = False
 
         data = json.loads(data)
         if 'tag' in data and 'images_quantity' in data:
@@ -67,6 +67,7 @@ class InstagramSpider(RedisSpider):
         Args:
             response: The response to parse.
         """
+        quantity = response.meta.get('quantity', 0)
         scripts = response.xpath(
             '//script[contains(text(), "sharedData")]/text()').re_first(
             r'window._sharedData = (.*);')
@@ -78,17 +79,21 @@ class InstagramSpider(RedisSpider):
             images += js['entry_data']['TagPage'][0]['tag']['media']['nodes']
 
         for img in images:
-            if self.number <= self.images_quantity:
+            if quantity < self.images_quantity:
                 item = ImageParserItem()
                 item['image_url'] = img['display_src']
                 item['site'] = 'https://' + self.allowed_domains[0]
                 item['tag'] = response.meta['tag']
-                item['rank'] = self.number
+                item['rank'] = quantity
                 # item['images_quantity'] = self.images_quantity
-                self.number += 1
+                quantity += 1
                 yield item
             else:
-                self.number = 1
+                # self.number = 1
+                r = redis.StrictRedis(host='127.0.0.1', port=6379)
+                Tag.objects.filter(name=response.meta['tag']).update(
+                    status_instagram='ready')
+                r.publish('instagram', response.meta['tag'])
                 return
 
         self.next_page = js["entry_data"]["TagPage"][0]["tag"]["media"][
@@ -98,13 +103,7 @@ class InstagramSpider(RedisSpider):
                                    js["entry_data"]["TagPage"][0]["tag"][
                                        "media"]["page_info"]["end_cursor"]
                                    )
-            yield scrapy.Request(url, self.parse)
+            yield scrapy.Request(url, self.parse,
+                                 meta={'tag': response.meta['tag'],
+                                       'quantity': quantity})
 
-    def spider_idle(self):
-        if not self.finish:
-            r = redis.StrictRedis(host='127.0.0.1', port=6379)
-            Tag.objects.filter(name=self.tag).update(
-                status_instagram='ready')
-            r.publish('instagram', self.tag)
-            self.finish = True
-        super(InstagramSpider, self).spider_idle()

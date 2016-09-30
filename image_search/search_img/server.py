@@ -21,6 +21,10 @@ class WebSocketFactory(WebSocketServerFactory):
                        # 'yandex': {},
                        # 'instagram': {}
                        }
+    sites = ['google',
+             # 'yandex',
+             # 'instagram'
+             ]
 
     def register_client(self, tag, id_connection, instance):
         """
@@ -40,18 +44,15 @@ class WebSocketFactory(WebSocketServerFactory):
         #     self._tags[tag] = []
         #     self._tags[tag] = tags
         #     self._tags[tag] += [{id_connection: instance}]
-        sites = ['google',
-                 # 'yandex',
-                 # 'instagram'
-                 ]
-        for site in sites:
+
+        for site in self.sites:
             self._search_engines[site].setdefault(tag, {
                 'address': {id_connection: instance}, 'counter': False})
 
-        for site in sites:
+        for site in self.sites:
             self._search_engines[site][tag][
                 'address'].setdefault(id_connection, instance)
-        print(self._search_engines)
+        # print(self._search_engines)
 
     def get_tags(self, channel, tag):
         """
@@ -72,7 +73,25 @@ class WebSocketFactory(WebSocketServerFactory):
         Args:
              id_connection: Address of the client.
         """
+        print('before')
+        print(self._search_engines)
+        for site in self.sites:
+            for tag in self._search_engines[site]:
+                # print(self._search_engines[site][tag]['address'])
+                if id_connection in self._search_engines[site][tag]['address']:
+                    del self._search_engines[site][tag]['address'][id_connection]
+                    # if not self._search_engines[site][tag]['address']:
+                    #     del self._search_engines[site][tag]
 
+            print('in--------')
+            print(self._search_engines)
+            # self._search_engines[site] = {k: v for k, v in
+            #                               self._search_engines[site].items() if v['counter']}
+            self._search_engines[site] = {k: v for k, v in
+                                          self._search_engines[site].items() if
+                                          v['address']}
+        print('after')
+        print(self._search_engines)
         # for tag, client in self._tags.items():
         #     if id_connection in client:
         #         del(self._tags[tag][id_connection])

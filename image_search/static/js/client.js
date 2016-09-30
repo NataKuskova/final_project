@@ -45,6 +45,8 @@ window.onload = function() {
         url=$('.form form').attr('action');
         $.ajax({
             url: url,
+//            beforeSend: function() { $('.wait').show(); },
+//            complete: function() { $('.wait').hide(); },
             type: "POST",
             dataType:"html",
             data: $('#search_form').serialize(),

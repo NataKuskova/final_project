@@ -90,14 +90,7 @@ class GoogleSpider(RedisSpider):
             '//table[contains(@id, "nav")]//tr/td[last()]/a/@href').extract()
         if next_page:
             url = response.urljoin(next_page[0])
-            yield scrapy.Request(url, self.parse, meta={'tag': response.meta['tag'], 'quantity': quantity})
+            yield scrapy.Request(url, self.parse,
+                                 meta={'tag': response.meta['tag'],
+                                       'quantity': quantity})
 
-
-    # def spider_idle(self):
-    #     if not self.finish:
-    #         r = redis.StrictRedis(host='127.0.0.1', port=6379)
-    #         Tag.objects.filter(name=self.tag).update(
-    #             status_google='ready')
-    #         r.publish('google', self.tag)
-    #         self.finish = True
-    #     super(GoogleSpider, self).spider_idle()
