@@ -26,10 +26,10 @@ class GoogleSpider(RedisSpider):
     allowed_domains = ['google.com.ua']
     start_urls = [
         'https://www.google.com.ua/search?site=imghp&tbm=isch&q=%s&oq=%s']
-    tag = None
+    # tag = None
     images_quantity = 5
-    number = 1
-    finish = True
+    # number = 1
+    # finish = True
 
     # def __init__(self):
     #     self.finish = True
@@ -45,11 +45,11 @@ class GoogleSpider(RedisSpider):
         Returns:
             Transmits URL into the function make_requests_from_url.
         """
-        self.finish = False
+        # self.finish = False
         data = json.loads(data)
         if 'tag' in data and 'images_quantity' in data:
             url = self.start_urls[0] % (data['tag'], data['tag'])
-            self.tag = data['tag']
+            # self.tag = data['tag']
             self.images_quantity = int(data['images_quantity'])
             # return self.make_requests_from_url(url)
             return Request(url, dont_filter=True, meta={'tag': data['tag']})
@@ -65,32 +65,39 @@ class GoogleSpider(RedisSpider):
         Args:
             response: The response to parse.
         """
+        quantity = response.meta.get('quantity', 0)
         images = response.xpath(
             '//table[contains(@class, "images_table")]//a//img')
         for img in images:
-            if self.number <= self.images_quantity:
+            if quantity < self.images_quantity:
                 item = ImageParserItem()
                 item['image_url'] = img.xpath('@src').extract()[0]
                 item['site'] = 'https://' + self.allowed_domains[0]
                 item['tag'] = response.meta['tag']
-                item['rank'] = self.number
+                item['rank'] = quantity
                 # item['images_quantity'] = self.images_quantity
-                self.number += 1
+                quantity += 1
                 yield item
             else:
-                self.number = 1
+                # self.number = 1
+                r = redis.StrictRedis(host='127.0.0.1', port=6379)
+                Tag.objects.filter(name=response.meta['tag']).update(
+                    status_google='ready')
+                r.publish('google', response.meta['tag'])
                 return
+
         next_page = response.xpath(
             '//table[contains(@id, "nav")]//tr/td[last()]/a/@href').extract()
         if next_page:
             url = response.urljoin(next_page[0])
-            yield scrapy.Request(url, self.parse)
+            yield scrapy.Request(url, self.parse, meta={'tag': response.meta['tag'], 'quantity': quantity})
 
-    def spider_idle(self):
-        if not self.finish:
-            r = redis.StrictRedis(host='127.0.0.1', port=6379)
-            Tag.objects.filter(name=self.tag).update(
-                status_google='ready')
-            r.publish('google', self.tag)
-            self.finish = True
-        super(GoogleSpider, self).spider_idle()
+
+    # def spider_idle(self):
+    #     if not self.finish:
+    #         r = redis.StrictRedis(host='127.0.0.1', port=6379)
+    #         Tag.objects.filter(name=self.tag).update(
+    #             status_google='ready')
+    #         r.publish('google', self.tag)
+    #         self.finish = True
+    #     super(GoogleSpider, self).spider_idle()

@@ -12,38 +12,48 @@ FORMAT = u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s ' \
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)  # filename=u'../logs.log'
 
 
-tags = {'google': [],
-        'yandex': [],
-        'instagram': []}
-
-
 class WebSocketFactory(WebSocketServerFactory):
     """
     Class for asyncio-based WebSocket server factories.
     """
 
-    _tags = {}
+    _search_engines = {'google': {},
+                       # 'yandex': {},
+                       # 'instagram': {}
+                       }
 
     def register_client(self, tag, id_connection, instance):
         """
         Adds a client to a list.
 
         Args:
+            tag: ...
             id_connection: Address of the client.
             instance: Instance of the class Server Protocol.
         """
         # self._tags[tag].setdefault(id_connection, instance)
         # self._tags.setdefault(tag, {id_connection: instance})
-        if tag not in self._tags:
-            self._tags[tag] = [{id_connection: instance}]
-        else:
-            tags = self._tags[tag]
-            self._tags[tag] = []
-            self._tags[tag] = tags
-            self._tags[tag] += [{id_connection: instance}]
-        # print(self._tags)
+        # if tag not in self._tags:
+        #     self._tags[tag] = [{id_connection: instance}]
+        # else:
+        #     tags = self._tags[tag]
+        #     self._tags[tag] = []
+        #     self._tags[tag] = tags
+        #     self._tags[tag] += [{id_connection: instance}]
+        sites = ['google',
+                 # 'yandex',
+                 # 'instagram'
+                 ]
+        for site in sites:
+            self._search_engines[site].setdefault(tag, {
+                'address': {id_connection: instance}, 'counter': False})
 
-    def get_tags(self):
+        for site in sites:
+            self._search_engines[site][tag][
+                'address'].setdefault(id_connection, instance)
+        print(self._search_engines)
+
+    def get_tags(self, channel, tag):
         """
         Receives the client instance.
 
@@ -53,7 +63,7 @@ class WebSocketFactory(WebSocketServerFactory):
         Returns:
             The client instance.
         """
-        return self._tags
+        return self._search_engines[channel][tag]
 
     def unregister_client(self, id_connection):
         """
@@ -62,11 +72,11 @@ class WebSocketFactory(WebSocketServerFactory):
         Args:
              id_connection: Address of the client.
         """
-        self._tags = {k: v for k, v in self._tags.items() if not v}
-        for tag, client in self._tags.items():
-            if id_connection in client:
-                del(self._tags[tag][id_connection])
 
+        # for tag, client in self._tags.items():
+        #     if id_connection in client:
+        #         del(self._tags[tag][id_connection])
+        # self._tags = {k: v for k, v in self._tags.items() if not v}
         logging.info('Connection {0} is closed.'.format(id_connection))
 
 
@@ -153,15 +163,27 @@ def run_subscriber():
 
     # Subscribe to channel.
     yield from subscriber.subscribe(['google',
-                                     'yandex',
-                                     'instagram'])
+                                     # 'yandex',
+                                     # 'instagram'
+                                    ])
+
+
 
     spiders = []
     # Inside a while loop, wait for incoming events.
     while True:
         reply = yield from subscriber.next_published()
 
-        global tags
+        key_dict = factory.get_tags(reply.channel, reply.value)
+
+        key_dict['counter'] = True
+
+        if factory.get_tags('google', reply.value)['counter']:
+            # and factory.search_engines['yandex'][reply.value]['counter'] \
+            #     and factory.search_engines['instagram'][reply.value]['counter']:
+            for client in key_dict['address'].values():
+                client.sendMessage('ok'.encode('utf8'), False)
+        """
         if reply.channel == 'google':
             tags['google'].append(reply.value)
         # if reply.channel == 'instagram':
@@ -178,6 +200,7 @@ def run_subscriber():
                 tags['google'].remove(tag)
                 # tags['instagram'].remove(tag)
                 # tags['yandex'].remove(tag)
+        """
         """
         spiders.append(json.loads(reply.value))
 
