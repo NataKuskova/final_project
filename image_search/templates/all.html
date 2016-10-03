@@ -1,10 +1,10 @@
 {% if tag_history %}
     {% for tag in tag_history %}
-        {% if forloop.last and tag.status == 'scheduled' %}
-            <p class="result_url">Results for tag "{{tag.name}}": <a id="last" href="{% url 'result' %}?tag={{tag.name}}"><div class="wait"></div></a></p>
-        {% else %}
-            <p class="result_url">Results for tag "{{tag.name}}": <a href="{% url 'result' %}?tag={{tag.name}}">{% url 'result'%}?tag={{tag.name}}</a></p>
-        {% endif %}
+        {# if forloop.last and tag.status == 'scheduled' #}
+            <!--<p class="result_url">Results for tag "<a id="last" href="{% url 'result' %}?tag={{tag.name}}">{{tag.name}}</a>" </p>-->
+        {# else #}
+            <p class="result_url">Results for tag "<a href="{% url 'result' %}?tag={{tag.name}}">{{tag.name}}</a>"<div class="wait" id="{{tag.name}}"></div></p>
+        {# endif #}
     {% endfor %}
 {% endif %}
 

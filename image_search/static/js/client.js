@@ -3,12 +3,6 @@ var isopen = false;
 //var clientID = '';
 window.onload = function() {
 
-
-
-
-
-
-
     $('#search').click(function(e){
         e.preventDefault();
 
@@ -30,7 +24,7 @@ window.onload = function() {
     //            $('#last').text('' + $('#id_tag').val());
 //            if (clientID == '')
 //                clientID = e.data;
-
+            $('#' + $('#id_tag').val()).css('display', 'none');
             socket.close();
 
         }
@@ -53,6 +47,8 @@ window.onload = function() {
             success: function(data) {
 //                alert(data);
                 $('#list_links').html(data);
+                $('#' + $('#id_tag').val()).css('display', 'inline-block');
+
                 send_message($('#id_tag').val(), socket);
             }
         });

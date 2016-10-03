@@ -52,7 +52,7 @@ class WebSocketFactory(WebSocketServerFactory):
         for site in self.sites:
             self._search_engines[site][tag][
                 'address'].setdefault(id_connection, instance)
-        # print(self._search_engines)
+        print(self._search_engines)
 
     def get_tags(self, channel, tag):
         """
@@ -73,8 +73,8 @@ class WebSocketFactory(WebSocketServerFactory):
         Args:
              id_connection: Address of the client.
         """
-        print('before')
-        print(self._search_engines)
+        # print('before')
+        # print(self._search_engines)
         for site in self.sites:
             for tag in self._search_engines[site]:
                 # print(self._search_engines[site][tag]['address'])
@@ -83,15 +83,15 @@ class WebSocketFactory(WebSocketServerFactory):
                     # if not self._search_engines[site][tag]['address']:
                     #     del self._search_engines[site][tag]
 
-            print('in--------')
-            print(self._search_engines)
+            # print('in--------')
+            # print(self._search_engines)
             # self._search_engines[site] = {k: v for k, v in
             #                               self._search_engines[site].items() if v['counter']}
             self._search_engines[site] = {k: v for k, v in
                                           self._search_engines[site].items() if
                                           v['address']}
-        print('after')
-        print(self._search_engines)
+        # print('after')
+        # print(self._search_engines)
         # for tag, client in self._tags.items():
         #     if id_connection in client:
         #         del(self._tags[tag][id_connection])
